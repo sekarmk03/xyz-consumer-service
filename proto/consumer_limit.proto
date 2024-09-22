@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package xyz_grpc;
+option go_package = "./;pb";
+
+import "google/protobuf/empty.proto";
+
+message ConsumerLimit {
+    uint64 id = 1;
+    uint64 consumer_id = 2;
+    uint64 tenor = 3;
+    uint64 limit_amount = 4;
+    uint64 limit_available = 5;
+    string created_at = 6;
+    string updated_at = 7;
+}
+
+message ConsumerLimitListResponse {
+    uint32 code = 1;
+    string message = 2;
+    repeated ConsumerLimit consumer_limits = 3;
+}
+
+message ConsumerLimitIdRequest {
+    uint64 id = 1;
+}
+
+message ConsumerLimitResponse {
+    uint32 code = 1;
+    string message = 2;
+    ConsumerLimit consumer_limit = 3;
+}
+
+service ConsumerLimitService {
+    rpc GetAllConsumerLimits(google.protobuf.Empty) returns (ConsumerLimitListResponse);
+    rpc GetConsumerLimitById(ConsumerLimitIdRequest) returns (ConsumerLimitResponse);
+    rpc CreateConsumerLimit(ConsumerLimit) returns (ConsumerLimitResponse);
+    rpc UpdateConsumerLimit(ConsumerLimit) returns (ConsumerLimitResponse);
+    rpc DeleteConsumerLimit(ConsumerLimitIdRequest) returns (ConsumerLimitResponse);
+}
