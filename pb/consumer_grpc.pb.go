@@ -33,9 +33,9 @@ const (
 type ConsumerServiceClient interface {
 	GetAllConsumers(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ConsumerListResponse, error)
 	GetConsumerById(ctx context.Context, in *ConsumerIdRequest, opts ...grpc.CallOption) (*ConsumerResponse, error)
-	CreateConsumer(ctx context.Context, in *ConsumerCreateRequest, opts ...grpc.CallOption) (*ConsumerResponse, error)
-	UpdateConsumer(ctx context.Context, in *Consumer, opts ...grpc.CallOption) (*ConsumerResponse, error)
-	DeleteConsumer(ctx context.Context, in *ConsumerIdRequest, opts ...grpc.CallOption) (*NoDataResponse, error)
+	CreateConsumer(ctx context.Context, in *ConsumerDataRequest, opts ...grpc.CallOption) (*ConsumerResponse, error)
+	UpdateConsumer(ctx context.Context, in *ConsumerDataRequest, opts ...grpc.CallOption) (*ConsumerResponse, error)
+	DeleteConsumer(ctx context.Context, in *ConsumerIdRequest, opts ...grpc.CallOption) (*ConsumerResponse, error)
 }
 
 type consumerServiceClient struct {
@@ -64,7 +64,7 @@ func (c *consumerServiceClient) GetConsumerById(ctx context.Context, in *Consume
 	return out, nil
 }
 
-func (c *consumerServiceClient) CreateConsumer(ctx context.Context, in *ConsumerCreateRequest, opts ...grpc.CallOption) (*ConsumerResponse, error) {
+func (c *consumerServiceClient) CreateConsumer(ctx context.Context, in *ConsumerDataRequest, opts ...grpc.CallOption) (*ConsumerResponse, error) {
 	out := new(ConsumerResponse)
 	err := c.cc.Invoke(ctx, ConsumerService_CreateConsumer_FullMethodName, in, out, opts...)
 	if err != nil {
@@ -73,7 +73,7 @@ func (c *consumerServiceClient) CreateConsumer(ctx context.Context, in *Consumer
 	return out, nil
 }
 
-func (c *consumerServiceClient) UpdateConsumer(ctx context.Context, in *Consumer, opts ...grpc.CallOption) (*ConsumerResponse, error) {
+func (c *consumerServiceClient) UpdateConsumer(ctx context.Context, in *ConsumerDataRequest, opts ...grpc.CallOption) (*ConsumerResponse, error) {
 	out := new(ConsumerResponse)
 	err := c.cc.Invoke(ctx, ConsumerService_UpdateConsumer_FullMethodName, in, out, opts...)
 	if err != nil {
@@ -82,8 +82,8 @@ func (c *consumerServiceClient) UpdateConsumer(ctx context.Context, in *Consumer
 	return out, nil
 }
 
-func (c *consumerServiceClient) DeleteConsumer(ctx context.Context, in *ConsumerIdRequest, opts ...grpc.CallOption) (*NoDataResponse, error) {
-	out := new(NoDataResponse)
+func (c *consumerServiceClient) DeleteConsumer(ctx context.Context, in *ConsumerIdRequest, opts ...grpc.CallOption) (*ConsumerResponse, error) {
+	out := new(ConsumerResponse)
 	err := c.cc.Invoke(ctx, ConsumerService_DeleteConsumer_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -97,9 +97,9 @@ func (c *consumerServiceClient) DeleteConsumer(ctx context.Context, in *Consumer
 type ConsumerServiceServer interface {
 	GetAllConsumers(context.Context, *emptypb.Empty) (*ConsumerListResponse, error)
 	GetConsumerById(context.Context, *ConsumerIdRequest) (*ConsumerResponse, error)
-	CreateConsumer(context.Context, *ConsumerCreateRequest) (*ConsumerResponse, error)
-	UpdateConsumer(context.Context, *Consumer) (*ConsumerResponse, error)
-	DeleteConsumer(context.Context, *ConsumerIdRequest) (*NoDataResponse, error)
+	CreateConsumer(context.Context, *ConsumerDataRequest) (*ConsumerResponse, error)
+	UpdateConsumer(context.Context, *ConsumerDataRequest) (*ConsumerResponse, error)
+	DeleteConsumer(context.Context, *ConsumerIdRequest) (*ConsumerResponse, error)
 	mustEmbedUnimplementedConsumerServiceServer()
 }
 
@@ -113,13 +113,13 @@ func (UnimplementedConsumerServiceServer) GetAllConsumers(context.Context, *empt
 func (UnimplementedConsumerServiceServer) GetConsumerById(context.Context, *ConsumerIdRequest) (*ConsumerResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetConsumerById not implemented")
 }
-func (UnimplementedConsumerServiceServer) CreateConsumer(context.Context, *ConsumerCreateRequest) (*ConsumerResponse, error) {
+func (UnimplementedConsumerServiceServer) CreateConsumer(context.Context, *ConsumerDataRequest) (*ConsumerResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateConsumer not implemented")
 }
-func (UnimplementedConsumerServiceServer) UpdateConsumer(context.Context, *Consumer) (*ConsumerResponse, error) {
+func (UnimplementedConsumerServiceServer) UpdateConsumer(context.Context, *ConsumerDataRequest) (*ConsumerResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateConsumer not implemented")
 }
-func (UnimplementedConsumerServiceServer) DeleteConsumer(context.Context, *ConsumerIdRequest) (*NoDataResponse, error) {
+func (UnimplementedConsumerServiceServer) DeleteConsumer(context.Context, *ConsumerIdRequest) (*ConsumerResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteConsumer not implemented")
 }
 func (UnimplementedConsumerServiceServer) mustEmbedUnimplementedConsumerServiceServer() {}
@@ -172,7 +172,7 @@ func _ConsumerService_GetConsumerById_Handler(srv interface{}, ctx context.Conte
 }
 
 func _ConsumerService_CreateConsumer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ConsumerCreateRequest)
+	in := new(ConsumerDataRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -184,13 +184,13 @@ func _ConsumerService_CreateConsumer_Handler(srv interface{}, ctx context.Contex
 		FullMethod: ConsumerService_CreateConsumer_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ConsumerServiceServer).CreateConsumer(ctx, req.(*ConsumerCreateRequest))
+		return srv.(ConsumerServiceServer).CreateConsumer(ctx, req.(*ConsumerDataRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _ConsumerService_UpdateConsumer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Consumer)
+	in := new(ConsumerDataRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -202,7 +202,7 @@ func _ConsumerService_UpdateConsumer_Handler(srv interface{}, ctx context.Contex
 		FullMethod: ConsumerService_UpdateConsumer_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ConsumerServiceServer).UpdateConsumer(ctx, req.(*Consumer))
+		return srv.(ConsumerServiceServer).UpdateConsumer(ctx, req.(*ConsumerDataRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

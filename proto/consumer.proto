@@ -35,26 +35,24 @@ message ConsumerResponse {
     Consumer consumer = 3;
 }
 
-message ConsumerCreateRequest {
-    string nik = 1;
-    string fullname = 2;
-    string legal_name = 3;
-    string birth_place = 4;
-    string birth_date = 5;
-    uint64 salary = 6;
-    bytes ktp = 7;
-    bytes selfie_photo = 8;
-}
-
-message NoDataResponse {
-    uint32 code = 1;
-    string message = 2;
+message ConsumerDataRequest {
+    uint64 id = 1;
+    string nik = 2;
+    string fullname = 3;
+    string legal_name = 4;
+    string birth_place = 5;
+    string birth_date = 6;
+    uint64 salary = 7;
+    bytes ktp_buffer = 8;
+    string ktp_filename = 9;
+    bytes selfie_photo_buffer = 10;
+    string selfie_photo_filename = 11;
 }
 
 service ConsumerService {
     rpc GetAllConsumers(google.protobuf.Empty) returns (ConsumerListResponse);
     rpc GetConsumerById(ConsumerIdRequest) returns (ConsumerResponse);
-    rpc CreateConsumer(ConsumerCreateRequest) returns (ConsumerResponse);
-    rpc UpdateConsumer(Consumer) returns (ConsumerResponse);
-    rpc DeleteConsumer(ConsumerIdRequest) returns (NoDataResponse);
+    rpc CreateConsumer(ConsumerDataRequest) returns (ConsumerResponse);
+    rpc UpdateConsumer(ConsumerDataRequest) returns (ConsumerResponse);
+    rpc DeleteConsumer(ConsumerIdRequest) returns (ConsumerResponse);
 }
