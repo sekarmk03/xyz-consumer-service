@@ -7,11 +7,11 @@ import (
 	"time"
 	"xyz-consumer-service/modules/consumer/entity"
 
+	"github.com/go-sql-driver/mysql"
 	"go.opencensus.io/trace"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"gorm.io/gorm"
-	"github.com/go-sql-driver/mysql"
 )
 
 type ConsumerRepository struct {

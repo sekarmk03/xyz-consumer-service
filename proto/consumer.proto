@@ -22,7 +22,7 @@ message Consumer {
 message ConsumerListResponse {
     uint32 code = 1;
     string message = 2;
-    repeated Consumer consumers = 3;
+    repeated Consumer data = 3;
 }
 
 message ConsumerIdRequest {
@@ -32,7 +32,7 @@ message ConsumerIdRequest {
 message ConsumerResponse {
     uint32 code = 1;
     string message = 2;
-    Consumer consumer = 3;
+    Consumer data = 3;
 }
 
 message ConsumerDataRequest {
