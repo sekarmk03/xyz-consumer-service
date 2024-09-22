@@ -12,7 +12,7 @@ const (
 type ConsumerLimit struct {
 	Id             uint64    `json:"id"`
 	ConsumerId     uint64    `json:"consumer_id"`
-	Tenor          uint64    `json:"tenor"`
+	Tenor          uint32    `json:"tenor"`
 	LimitAmount    uint64    `json:"limit_amount"`
 	LimitAvailable uint64    `json:"limit_available"`
 	CreatedAt      time.Time `json:"created_at"`

@@ -8,7 +8,7 @@ import "google/protobuf/empty.proto";
 message ConsumerLimit {
     uint64 id = 1;
     uint64 consumer_id = 2;
-    uint64 tenor = 3;
+    uint32 tenor = 3;
     uint64 limit_amount = 4;
     uint64 limit_available = 5;
     string created_at = 6;
