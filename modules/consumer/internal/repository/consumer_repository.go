@@ -11,6 +11,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"gorm.io/gorm"
+	"github.com/go-sql-driver/mysql"
 )
 
 type ConsumerRepository struct {
@@ -66,7 +67,8 @@ func (c *ConsumerRepository) Create(ctx context.Context, req *entity.Consumer) (
 	defer span.End()
 
 	if err := c.db.Debug().WithContext(ctxSpan).Create(req).Error; err != nil {
-		if errors.Is(err, gorm.ErrDuplicatedKey) {
+		var mysqlErr *mysql.MySQLError
+		if errors.As(err, &mysqlErr) && mysqlErr.Number == 1062 {
 			log.Println("WARNING: [ConsumerRepository - Create] Consumer already exists for nik:", req.Nik)
 			return nil, status.Errorf(codes.AlreadyExists, "Consumer already exists for nik: %v", req.Nik)
 		}
@@ -87,10 +89,6 @@ func (c *ConsumerRepository) Update(ctx context.Context, consumer *entity.Consum
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			log.Println("WARNING: [ConsumerRepository - Update] Consumer not found for id:", consumer.Id)
 			return nil, status.Errorf(codes.NotFound, "Consumer not found for id: %v", consumer.Id)
-		}
-		if errors.Is(err, gorm.ErrDuplicatedKey) {
-			log.Println("WARNING: [ConsumerRepository - Update] Consumer already exists for nik:", consumer.Nik)
-			return nil, status.Errorf(codes.AlreadyExists, "Consumer already exists for nik: %v", consumer.Nik)
 		}
 		log.Println("ERROR: [ConsumerRepository - Update] Internal server error:", err)
 		return nil, err
