@@ -3,9 +3,9 @@ package authorization
 type AccessibleRoles map[string]map[string][]uint32
 
 const (
-	BasePath = "xyz-consumer-service"
-	ConsumerSvc  = "ConsumerService"
-	LimitSvc = "LimitService"
+	BasePath    = "xyz-consumer-service"
+	ConsumerSvc = "ConsumerService"
+	LimitSvc    = "LimitService"
 )
 
 var roles = AccessibleRoles{
