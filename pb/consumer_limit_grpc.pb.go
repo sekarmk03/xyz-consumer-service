@@ -11,7 +11,6 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -20,22 +19,18 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	ConsumerLimitService_GetAllConsumerLimits_FullMethodName = "/xyz_grpc.ConsumerLimitService/GetAllConsumerLimits"
-	ConsumerLimitService_GetConsumerLimitById_FullMethodName = "/xyz_grpc.ConsumerLimitService/GetConsumerLimitById"
-	ConsumerLimitService_CreateConsumerLimit_FullMethodName  = "/xyz_grpc.ConsumerLimitService/CreateConsumerLimit"
-	ConsumerLimitService_UpdateConsumerLimit_FullMethodName  = "/xyz_grpc.ConsumerLimitService/UpdateConsumerLimit"
-	ConsumerLimitService_DeleteConsumerLimit_FullMethodName  = "/xyz_grpc.ConsumerLimitService/DeleteConsumerLimit"
+	ConsumerLimitService_GetConsumerLimitsByConsumerId_FullMethodName = "/xyz_grpc.ConsumerLimitService/GetConsumerLimitsByConsumerId"
+	ConsumerLimitService_CreateConsumerLimit_FullMethodName           = "/xyz_grpc.ConsumerLimitService/CreateConsumerLimit"
+	ConsumerLimitService_UpdateAvailableLimit_FullMethodName          = "/xyz_grpc.ConsumerLimitService/UpdateAvailableLimit"
 )
 
 // ConsumerLimitServiceClient is the client API for ConsumerLimitService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ConsumerLimitServiceClient interface {
-	GetAllConsumerLimits(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ConsumerLimitListResponse, error)
-	GetConsumerLimitById(ctx context.Context, in *ConsumerLimitIdRequest, opts ...grpc.CallOption) (*ConsumerLimitResponse, error)
+	GetConsumerLimitsByConsumerId(ctx context.Context, in *ConsumerRequest, opts ...grpc.CallOption) (*ConsumerLimitListResponse, error)
 	CreateConsumerLimit(ctx context.Context, in *ConsumerLimit, opts ...grpc.CallOption) (*ConsumerLimitResponse, error)
-	UpdateConsumerLimit(ctx context.Context, in *ConsumerLimit, opts ...grpc.CallOption) (*ConsumerLimitResponse, error)
-	DeleteConsumerLimit(ctx context.Context, in *ConsumerLimitIdRequest, opts ...grpc.CallOption) (*ConsumerLimitResponse, error)
+	UpdateAvailableLimit(ctx context.Context, in *UpdateAvailableLimitRequest, opts ...grpc.CallOption) (*ConsumerLimitResponse, error)
 }
 
 type consumerLimitServiceClient struct {
@@ -46,18 +41,9 @@ func NewConsumerLimitServiceClient(cc grpc.ClientConnInterface) ConsumerLimitSer
 	return &consumerLimitServiceClient{cc}
 }
 
-func (c *consumerLimitServiceClient) GetAllConsumerLimits(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ConsumerLimitListResponse, error) {
+func (c *consumerLimitServiceClient) GetConsumerLimitsByConsumerId(ctx context.Context, in *ConsumerRequest, opts ...grpc.CallOption) (*ConsumerLimitListResponse, error) {
 	out := new(ConsumerLimitListResponse)
-	err := c.cc.Invoke(ctx, ConsumerLimitService_GetAllConsumerLimits_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *consumerLimitServiceClient) GetConsumerLimitById(ctx context.Context, in *ConsumerLimitIdRequest, opts ...grpc.CallOption) (*ConsumerLimitResponse, error) {
-	out := new(ConsumerLimitResponse)
-	err := c.cc.Invoke(ctx, ConsumerLimitService_GetConsumerLimitById_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, ConsumerLimitService_GetConsumerLimitsByConsumerId_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -73,18 +59,9 @@ func (c *consumerLimitServiceClient) CreateConsumerLimit(ctx context.Context, in
 	return out, nil
 }
 
-func (c *consumerLimitServiceClient) UpdateConsumerLimit(ctx context.Context, in *ConsumerLimit, opts ...grpc.CallOption) (*ConsumerLimitResponse, error) {
+func (c *consumerLimitServiceClient) UpdateAvailableLimit(ctx context.Context, in *UpdateAvailableLimitRequest, opts ...grpc.CallOption) (*ConsumerLimitResponse, error) {
 	out := new(ConsumerLimitResponse)
-	err := c.cc.Invoke(ctx, ConsumerLimitService_UpdateConsumerLimit_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *consumerLimitServiceClient) DeleteConsumerLimit(ctx context.Context, in *ConsumerLimitIdRequest, opts ...grpc.CallOption) (*ConsumerLimitResponse, error) {
-	out := new(ConsumerLimitResponse)
-	err := c.cc.Invoke(ctx, ConsumerLimitService_DeleteConsumerLimit_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, ConsumerLimitService_UpdateAvailableLimit_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -95,11 +72,9 @@ func (c *consumerLimitServiceClient) DeleteConsumerLimit(ctx context.Context, in
 // All implementations must embed UnimplementedConsumerLimitServiceServer
 // for forward compatibility
 type ConsumerLimitServiceServer interface {
-	GetAllConsumerLimits(context.Context, *emptypb.Empty) (*ConsumerLimitListResponse, error)
-	GetConsumerLimitById(context.Context, *ConsumerLimitIdRequest) (*ConsumerLimitResponse, error)
+	GetConsumerLimitsByConsumerId(context.Context, *ConsumerRequest) (*ConsumerLimitListResponse, error)
 	CreateConsumerLimit(context.Context, *ConsumerLimit) (*ConsumerLimitResponse, error)
-	UpdateConsumerLimit(context.Context, *ConsumerLimit) (*ConsumerLimitResponse, error)
-	DeleteConsumerLimit(context.Context, *ConsumerLimitIdRequest) (*ConsumerLimitResponse, error)
+	UpdateAvailableLimit(context.Context, *UpdateAvailableLimitRequest) (*ConsumerLimitResponse, error)
 	mustEmbedUnimplementedConsumerLimitServiceServer()
 }
 
@@ -107,20 +82,14 @@ type ConsumerLimitServiceServer interface {
 type UnimplementedConsumerLimitServiceServer struct {
 }
 
-func (UnimplementedConsumerLimitServiceServer) GetAllConsumerLimits(context.Context, *emptypb.Empty) (*ConsumerLimitListResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetAllConsumerLimits not implemented")
-}
-func (UnimplementedConsumerLimitServiceServer) GetConsumerLimitById(context.Context, *ConsumerLimitIdRequest) (*ConsumerLimitResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetConsumerLimitById not implemented")
+func (UnimplementedConsumerLimitServiceServer) GetConsumerLimitsByConsumerId(context.Context, *ConsumerRequest) (*ConsumerLimitListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetConsumerLimitsByConsumerId not implemented")
 }
 func (UnimplementedConsumerLimitServiceServer) CreateConsumerLimit(context.Context, *ConsumerLimit) (*ConsumerLimitResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateConsumerLimit not implemented")
 }
-func (UnimplementedConsumerLimitServiceServer) UpdateConsumerLimit(context.Context, *ConsumerLimit) (*ConsumerLimitResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateConsumerLimit not implemented")
-}
-func (UnimplementedConsumerLimitServiceServer) DeleteConsumerLimit(context.Context, *ConsumerLimitIdRequest) (*ConsumerLimitResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteConsumerLimit not implemented")
+func (UnimplementedConsumerLimitServiceServer) UpdateAvailableLimit(context.Context, *UpdateAvailableLimitRequest) (*ConsumerLimitResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateAvailableLimit not implemented")
 }
 func (UnimplementedConsumerLimitServiceServer) mustEmbedUnimplementedConsumerLimitServiceServer() {}
 
@@ -135,38 +104,20 @@ func RegisterConsumerLimitServiceServer(s grpc.ServiceRegistrar, srv ConsumerLim
 	s.RegisterService(&ConsumerLimitService_ServiceDesc, srv)
 }
 
-func _ConsumerLimitService_GetAllConsumerLimits_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(emptypb.Empty)
+func _ConsumerLimitService_GetConsumerLimitsByConsumerId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ConsumerRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ConsumerLimitServiceServer).GetAllConsumerLimits(ctx, in)
+		return srv.(ConsumerLimitServiceServer).GetConsumerLimitsByConsumerId(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: ConsumerLimitService_GetAllConsumerLimits_FullMethodName,
+		FullMethod: ConsumerLimitService_GetConsumerLimitsByConsumerId_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ConsumerLimitServiceServer).GetAllConsumerLimits(ctx, req.(*emptypb.Empty))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ConsumerLimitService_GetConsumerLimitById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ConsumerLimitIdRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ConsumerLimitServiceServer).GetConsumerLimitById(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: ConsumerLimitService_GetConsumerLimitById_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ConsumerLimitServiceServer).GetConsumerLimitById(ctx, req.(*ConsumerLimitIdRequest))
+		return srv.(ConsumerLimitServiceServer).GetConsumerLimitsByConsumerId(ctx, req.(*ConsumerRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -189,38 +140,20 @@ func _ConsumerLimitService_CreateConsumerLimit_Handler(srv interface{}, ctx cont
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ConsumerLimitService_UpdateConsumerLimit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ConsumerLimit)
+func _ConsumerLimitService_UpdateAvailableLimit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateAvailableLimitRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ConsumerLimitServiceServer).UpdateConsumerLimit(ctx, in)
+		return srv.(ConsumerLimitServiceServer).UpdateAvailableLimit(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: ConsumerLimitService_UpdateConsumerLimit_FullMethodName,
+		FullMethod: ConsumerLimitService_UpdateAvailableLimit_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ConsumerLimitServiceServer).UpdateConsumerLimit(ctx, req.(*ConsumerLimit))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ConsumerLimitService_DeleteConsumerLimit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ConsumerLimitIdRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ConsumerLimitServiceServer).DeleteConsumerLimit(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: ConsumerLimitService_DeleteConsumerLimit_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ConsumerLimitServiceServer).DeleteConsumerLimit(ctx, req.(*ConsumerLimitIdRequest))
+		return srv.(ConsumerLimitServiceServer).UpdateAvailableLimit(ctx, req.(*UpdateAvailableLimitRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -233,24 +166,16 @@ var ConsumerLimitService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*ConsumerLimitServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetAllConsumerLimits",
-			Handler:    _ConsumerLimitService_GetAllConsumerLimits_Handler,
-		},
-		{
-			MethodName: "GetConsumerLimitById",
-			Handler:    _ConsumerLimitService_GetConsumerLimitById_Handler,
+			MethodName: "GetConsumerLimitsByConsumerId",
+			Handler:    _ConsumerLimitService_GetConsumerLimitsByConsumerId_Handler,
 		},
 		{
 			MethodName: "CreateConsumerLimit",
 			Handler:    _ConsumerLimitService_CreateConsumerLimit_Handler,
 		},
 		{
-			MethodName: "UpdateConsumerLimit",
-			Handler:    _ConsumerLimitService_UpdateConsumerLimit_Handler,
-		},
-		{
-			MethodName: "DeleteConsumerLimit",
-			Handler:    _ConsumerLimitService_DeleteConsumerLimit_Handler,
+			MethodName: "UpdateAvailableLimit",
+			Handler:    _ConsumerLimitService_UpdateAvailableLimit_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
