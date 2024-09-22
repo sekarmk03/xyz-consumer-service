@@ -16,7 +16,7 @@ message ConsumerLimit {
 message ConsumerLimitListResponse {
     uint32 code = 1;
     string message = 2;
-    repeated ConsumerLimit consumer_limits = 3;
+    repeated ConsumerLimit data = 3;
 }
 
 message ConsumerRequest {
@@ -32,7 +32,7 @@ message UpdateAvailableLimitRequest {
 message ConsumerLimitResponse {
     uint32 code = 1;
     string message = 2;
-    ConsumerLimit consumer_limit = 3;
+    ConsumerLimit data = 3;
 }
 
 service ConsumerLimitService {

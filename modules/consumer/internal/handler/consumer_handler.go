@@ -47,9 +47,9 @@ func (ch *ConsumerHandler) GetAllConsumers(ctx context.Context, req *emptypb.Emp
 	}
 
 	return &pb.ConsumerListResponse{
-		Code:      uint32(http.StatusOK),
-		Message:   "Success get all consumers",
-		Consumers: consumers,
+		Code:    uint32(http.StatusOK),
+		Message: "Success get all consumers",
+		Data:    consumers,
 	}, nil
 }
 
@@ -72,9 +72,9 @@ func (ch *ConsumerHandler) GetConsumerById(ctx context.Context, req *pb.Consumer
 	}
 
 	return &pb.ConsumerResponse{
-		Code:     uint32(http.StatusOK),
-		Message:  "Success get consumer by id",
-		Consumer: entity.ConvertEntityToProto(consumer),
+		Code:    uint32(http.StatusOK),
+		Message: "Success get consumer by id",
+		Data:    entity.ConvertEntityToProto(consumer),
 	}, nil
 }
 
@@ -110,9 +110,9 @@ func (ch *ConsumerHandler) CreateConsumer(ctx context.Context, req *pb.ConsumerD
 	}
 
 	return &pb.ConsumerResponse{
-		Code:     uint32(http.StatusCreated),
-		Message:  "Success create consumer",
-		Consumer: entity.ConvertEntityToProto(consumer),
+		Code:    uint32(http.StatusCreated),
+		Message: "Success create consumer",
+		Data:    entity.ConvertEntityToProto(consumer),
 	}, nil
 }
 
@@ -194,9 +194,9 @@ func (ch *ConsumerHandler) UpdateConsumer(ctx context.Context, req *pb.ConsumerD
 	}
 
 	return &pb.ConsumerResponse{
-		Code:     uint32(http.StatusOK),
-		Message:  "Success update consumer",
-		Consumer: entity.ConvertEntityToProto(res),
+		Code:    uint32(http.StatusOK),
+		Message: "Success update consumer",
+		Data:    entity.ConvertEntityToProto(res),
 	}, nil
 }
 
