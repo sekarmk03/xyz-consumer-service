@@ -111,3 +111,28 @@ func (clh *ConsumerLimitHandler) UpdateAvailableLimit(ctx context.Context, req *
 		Data:    entity.ConvertEntityToProto(consumerLimitUpdate),
 	}, nil
 }
+
+func (clh *ConsumerLimitHandler) GetConsumerLimitByConsumerIdAndTenor(ctx context.Context, req *pb.ConsumerIdAndTenorRequest) (*pb.ConsumerLimitResponse, error) {
+	consumerLimit, err := clh.consumerLimitSvc.FindByConsumerIdAndTenor(ctx, req.ConsumerId, req.Tenor)
+	if err != nil {
+		if consumerLimit == nil {
+			log.Println("WARNING: [ConsumerLimitHandler - GetConsumerLimitByConsumerIdAndTenor] Consumer limit not found for consumer id:", req.ConsumerId, "and tenor:", req.Tenor)
+			return &pb.ConsumerLimitResponse{
+				Code:    uint32(http.StatusNotFound),
+				Message: "Consumer limit not found",
+			}, status.Errorf(codes.NotFound, "Consumer limit not found")
+		}
+		parseError := commonErr.ParseError(err)
+		log.Println("ERROR: [ConsumerLimitHandler - GetConsumerLimitByConsumerIdAndTenor] Error while find consumer limit by consumer id and tenor:", parseError.Message)
+		return &pb.ConsumerLimitResponse{
+			Code:    uint32(http.StatusInternalServerError),
+			Message: parseError.Message,
+		}, status.Errorf(parseError.Code, parseError.Message)
+	}
+
+	return &pb.ConsumerLimitResponse{
+		Code:    uint32(http.StatusOK),
+		Message: "Success get consumer limit by consumer id and tenor",
+		Data:    entity.ConvertEntityToProto(consumerLimit),
+	}, nil
+}
