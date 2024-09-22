@@ -9,6 +9,7 @@ import (
 	"xyz-consumer-service/server"
 
 	consumerModule "xyz-consumer-service/modules/consumer"
+	consumerLimitModule "xyz-consumer-service/modules/consumer_limit"
 
 	"google.golang.org/grpc"
 	"gorm.io/gorm"
@@ -45,6 +46,7 @@ func checkError(err error) {
 
 func registerGrpcHandlers(server *grpc.Server, cfg config.Config, db *gorm.DB, grpcConn *grpc.ClientConn) {
 	consumerModule.InitGrpc(server, cfg, db, grpcConn)
+	consumerLimitModule.InitGrpc(server, cfg, db, grpcConn)
 }
 
 func splash(cfg *config.Config) {
