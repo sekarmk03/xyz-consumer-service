@@ -16,16 +16,16 @@ import (
 
 type ConsumerHandler struct {
 	pb.UnimplementedConsumerServiceServer
-	config config.Config
+	config      config.Config
 	consumerSvc service.ConsumerServiceUseCase
-	imageSvc service.ImageServiceUseCase
+	imageSvc    service.ImageServiceUseCase
 }
 
 func NewConsumerHandler(config config.Config, consumerSvc service.ConsumerServiceUseCase, imageSvc service.ImageServiceUseCase) *ConsumerHandler {
 	return &ConsumerHandler{
-		config: config,
+		config:      config,
 		consumerSvc: consumerSvc,
-		imageSvc: imageSvc,
+		imageSvc:    imageSvc,
 	}
 }
 
@@ -35,7 +35,7 @@ func (ch *ConsumerHandler) GetAllConsumers(ctx context.Context, req *emptypb.Emp
 		parseError := commonErr.ParseError(err)
 		log.Println("ERROR: [ConsumerHandler - GetAllConsumers] Error while find all consumer:", parseError.Message)
 		return &pb.ConsumerListResponse{
-			Code: uint32(http.StatusInternalServerError),
+			Code:    uint32(http.StatusInternalServerError),
 			Message: parseError.Message,
 		}, status.Errorf(parseError.Code, parseError.Message)
 	}
@@ -46,8 +46,8 @@ func (ch *ConsumerHandler) GetAllConsumers(ctx context.Context, req *emptypb.Emp
 	}
 
 	return &pb.ConsumerListResponse{
-		Code: uint32(http.StatusOK),
-		Message: "Success get all consumers",
+		Code:      uint32(http.StatusOK),
+		Message:   "Success get all consumers",
 		Consumers: consumers,
 	}, nil
 }
@@ -58,21 +58,21 @@ func (ch *ConsumerHandler) GetConsumerById(ctx context.Context, req *pb.Consumer
 		if consumer == nil {
 			log.Println("WARNING: [ConsumerHandler - GetConsumerById] Consumer not found for id:", req.Id)
 			return &pb.ConsumerResponse{
-				Code: uint32(http.StatusNotFound),
+				Code:    uint32(http.StatusNotFound),
 				Message: "Consumer not found",
 			}, status.Errorf(http.StatusNotFound, "Consumer not found for id: %v", req.Id)
 		}
 		parseError := commonErr.ParseError(err)
 		log.Println("ERROR: [ConsumerHandler - GetConsumerById] Internal server error:", parseError.Message)
 		return &pb.ConsumerResponse{
-			Code: uint32(http.StatusInternalServerError),
+			Code:    uint32(http.StatusInternalServerError),
 			Message: parseError.Message,
 		}, status.Errorf(parseError.Code, parseError.Message)
 	}
 
 	return &pb.ConsumerResponse{
-		Code: uint32(http.StatusOK),
-		Message: "Success get consumer by id",
+		Code:     uint32(http.StatusOK),
+		Message:  "Success get consumer by id",
 		Consumer: entity.ConvertEntityToProto(consumer),
 	}, nil
 }
@@ -83,7 +83,7 @@ func (ch *ConsumerHandler) CreateConsumer(ctx context.Context, req *pb.ConsumerD
 		parseError := commonErr.ParseError(err)
 		log.Println("ERROR: [ConsumerHandler - CreateConsumer] Error while upload ktp image:", parseError.Message)
 		return &pb.ConsumerResponse{
-			Code: uint32(http.StatusInternalServerError),
+			Code:    uint32(http.StatusInternalServerError),
 			Message: parseError.Message,
 		}, status.Errorf(parseError.Code, parseError.Message)
 	}
@@ -93,7 +93,7 @@ func (ch *ConsumerHandler) CreateConsumer(ctx context.Context, req *pb.ConsumerD
 		parseError := commonErr.ParseError(err)
 		log.Println("ERROR: [ConsumerHandler - CreateConsumer] Error while upload selfie photo image:", parseError.Message)
 		return &pb.ConsumerResponse{
-			Code: uint32(http.StatusInternalServerError),
+			Code:    uint32(http.StatusInternalServerError),
 			Message: parseError.Message,
 		}, status.Errorf(parseError.Code, parseError.Message)
 	}
@@ -103,14 +103,14 @@ func (ch *ConsumerHandler) CreateConsumer(ctx context.Context, req *pb.ConsumerD
 		parseError := commonErr.ParseError(err)
 		log.Println("ERROR: [ConsumerHandler - CreateConsumer] Error while create consumer:", parseError.Message)
 		return &pb.ConsumerResponse{
-			Code: uint32(http.StatusInternalServerError),
+			Code:    uint32(http.StatusInternalServerError),
 			Message: parseError.Message,
 		}, status.Errorf(parseError.Code, parseError.Message)
 	}
 
 	return &pb.ConsumerResponse{
-		Code: uint32(http.StatusCreated),
-		Message: "Success create consumer",
+		Code:     uint32(http.StatusCreated),
+		Message:  "Success create consumer",
 		Consumer: entity.ConvertEntityToProto(consumer),
 	}, nil
 }
@@ -121,14 +121,14 @@ func (ch *ConsumerHandler) UpdateConsumer(ctx context.Context, req *pb.ConsumerD
 		if consumer == nil {
 			log.Println("WARNING: [ConsumerHandler - UpdateConsumer] Consumer not found for id:", req.Id)
 			return &pb.ConsumerResponse{
-				Code: uint32(http.StatusNotFound),
+				Code:    uint32(http.StatusNotFound),
 				Message: "Consumer not found",
 			}, status.Errorf(http.StatusNotFound, "Consumer not found for id: %v", req.Id)
 		}
 		parseError := commonErr.ParseError(err)
 		log.Println("ERROR: [ConsumerHandler - UpdateConsumer] Error while find consumer by id:", parseError.Message)
 		return &pb.ConsumerResponse{
-			Code: uint32(http.StatusInternalServerError),
+			Code:    uint32(http.StatusInternalServerError),
 			Message: parseError.Message,
 		}, status.Errorf(parseError.Code, parseError.Message)
 	}
@@ -138,7 +138,7 @@ func (ch *ConsumerHandler) UpdateConsumer(ctx context.Context, req *pb.ConsumerD
 		parseError := commonErr.ParseError(err)
 		log.Println("ERROR: [ConsumerHandler - UpdateConsumer] Error while upload ktp image:", parseError.Message)
 		return &pb.ConsumerResponse{
-			Code: uint32(http.StatusInternalServerError),
+			Code:    uint32(http.StatusInternalServerError),
 			Message: parseError.Message,
 		}, status.Errorf(parseError.Code, parseError.Message)
 	}
@@ -148,7 +148,7 @@ func (ch *ConsumerHandler) UpdateConsumer(ctx context.Context, req *pb.ConsumerD
 		parseError := commonErr.ParseError(err)
 		log.Println("ERROR: [ConsumerHandler - UpdateConsumer] Error while delete ktp image:", parseError.Message)
 		return &pb.ConsumerResponse{
-			Code: uint32(http.StatusInternalServerError),
+			Code:    uint32(http.StatusInternalServerError),
 			Message: parseError.Message,
 		}, status.Errorf(parseError.Code, parseError.Message)
 	}
@@ -158,7 +158,7 @@ func (ch *ConsumerHandler) UpdateConsumer(ctx context.Context, req *pb.ConsumerD
 		parseError := commonErr.ParseError(err)
 		log.Println("ERROR: [ConsumerHandler - UpdateConsumer] Error while upload selfie photo image:", parseError.Message)
 		return &pb.ConsumerResponse{
-			Code: uint32(http.StatusInternalServerError),
+			Code:    uint32(http.StatusInternalServerError),
 			Message: parseError.Message,
 		}, status.Errorf(parseError.Code, parseError.Message)
 	}
@@ -168,7 +168,7 @@ func (ch *ConsumerHandler) UpdateConsumer(ctx context.Context, req *pb.ConsumerD
 		parseError := commonErr.ParseError(err)
 		log.Println("ERROR: [ConsumerHandler - UpdateConsumer] Error while delete selfie photo image:", parseError.Message)
 		return &pb.ConsumerResponse{
-			Code: uint32(http.StatusInternalServerError),
+			Code:    uint32(http.StatusInternalServerError),
 			Message: parseError.Message,
 		}, status.Errorf(parseError.Code, parseError.Message)
 	}
@@ -187,14 +187,14 @@ func (ch *ConsumerHandler) UpdateConsumer(ctx context.Context, req *pb.ConsumerD
 		parseError := commonErr.ParseError(err)
 		log.Println("ERROR: [ConsumerHandler - UpdateConsumer] Error while update consumer:", parseError.Message)
 		return &pb.ConsumerResponse{
-			Code: uint32(http.StatusInternalServerError),
+			Code:    uint32(http.StatusInternalServerError),
 			Message: parseError.Message,
 		}, status.Errorf(parseError.Code, parseError.Message)
 	}
 
 	return &pb.ConsumerResponse{
-		Code: uint32(http.StatusOK),
-		Message: "Success update consumer",
+		Code:     uint32(http.StatusOK),
+		Message:  "Success update consumer",
 		Consumer: entity.ConvertEntityToProto(res),
 	}, nil
 }
@@ -205,14 +205,14 @@ func (ch *ConsumerHandler) DeleteConsumer(ctx context.Context, req *pb.ConsumerI
 		if consumer == nil {
 			log.Println("WARNING: [ConsumerHandler - DeleteConsumer] Consumer not found for id:", req.Id)
 			return &pb.ConsumerResponse{
-				Code: uint32(http.StatusNotFound),
+				Code:    uint32(http.StatusNotFound),
 				Message: "Consumer not found",
 			}, status.Errorf(http.StatusNotFound, "Consumer not found for id: %v", req.Id)
 		}
 		parseError := commonErr.ParseError(err)
 		log.Println("ERROR: [ConsumerHandler - DeleteConsumer] Error while find consumer by id:", parseError.Message)
 		return &pb.ConsumerResponse{
-			Code: uint32(http.StatusInternalServerError),
+			Code:    uint32(http.StatusInternalServerError),
 			Message: parseError.Message,
 		}, status.Errorf(parseError.Code, parseError.Message)
 	}
@@ -222,7 +222,7 @@ func (ch *ConsumerHandler) DeleteConsumer(ctx context.Context, req *pb.ConsumerI
 		parseError := commonErr.ParseError(err)
 		log.Println("ERROR: [ConsumerHandler - DeleteConsumer] Error while delete ktp image:", parseError.Message)
 		return &pb.ConsumerResponse{
-			Code: uint32(http.StatusInternalServerError),
+			Code:    uint32(http.StatusInternalServerError),
 			Message: parseError.Message,
 		}, status.Errorf(parseError.Code, parseError.Message)
 	}
@@ -232,7 +232,7 @@ func (ch *ConsumerHandler) DeleteConsumer(ctx context.Context, req *pb.ConsumerI
 		parseError := commonErr.ParseError(err)
 		log.Println("ERROR: [ConsumerHandler - DeleteConsumer] Error while delete selfie photo image:", parseError.Message)
 		return &pb.ConsumerResponse{
-			Code: uint32(http.StatusInternalServerError),
+			Code:    uint32(http.StatusInternalServerError),
 			Message: parseError.Message,
 		}, status.Errorf(parseError.Code, parseError.Message)
 	}
@@ -242,13 +242,13 @@ func (ch *ConsumerHandler) DeleteConsumer(ctx context.Context, req *pb.ConsumerI
 		parseError := commonErr.ParseError(err)
 		log.Println("ERROR: [ConsumerHandler - DeleteConsumer] Error while delete consumer:", parseError.Message)
 		return &pb.ConsumerResponse{
-			Code: uint32(http.StatusInternalServerError),
+			Code:    uint32(http.StatusInternalServerError),
 			Message: parseError.Message,
 		}, status.Errorf(parseError.Code, parseError.Message)
 	}
 
 	return &pb.ConsumerResponse{
-		Code: uint32(http.StatusOK),
+		Code:    uint32(http.StatusOK),
 		Message: "Success delete consumer",
 	}, nil
 }
