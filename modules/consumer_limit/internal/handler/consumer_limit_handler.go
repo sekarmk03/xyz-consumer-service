@@ -60,7 +60,7 @@ func (clh *ConsumerLimitHandler) CreateConsumerLimit(ctx context.Context, req *p
 		}, status.Errorf(codes.AlreadyExists, "Consumer limit already exist")
 	}
 
-	consumerLimit, err := clh.consumerLimitSvc.Create(ctx, req.ConsumerId, req.Tenor, req.LimitAmount, req.LimitAvailable)
+	consumerLimit, err := clh.consumerLimitSvc.Create(ctx, req.ConsumerId, req.Tenor, req.LimitAmount)
 	if err != nil {
 		parseError := commonErr.ParseError(err)
 		log.Println("ERROR: [ConsumerLimitHandler - CreateConsumerLimit] Error while create consumer limit:", parseError.Message)
@@ -77,7 +77,7 @@ func (clh *ConsumerLimitHandler) CreateConsumerLimit(ctx context.Context, req *p
 	}, nil
 }
 
-func (clh *ConsumerLimitHandler) UpdateConsumerLimitAvailable(ctx context.Context, req *pb.UpdateAvailableLimitRequest) (*pb.ConsumerLimitResponse, error) {
+func (clh *ConsumerLimitHandler) UpdateAvailableLimit(ctx context.Context, req *pb.UpdateAvailableLimitRequest) (*pb.ConsumerLimitResponse, error) {
 	consumerLimit, err := clh.consumerLimitSvc.FindByConsumerIdAndTenor(ctx, req.ConsumerId, req.Tenor)
 	if err != nil {
 		if consumerLimit == nil {

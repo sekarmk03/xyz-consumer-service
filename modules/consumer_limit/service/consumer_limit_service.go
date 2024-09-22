@@ -25,7 +25,7 @@ func NewConsumerLimitService(cfg config.Config, consumerLimitRepository reposito
 type ConsumerLimitServiceUseCase interface {
 	FindByConsumerId(ctx context.Context, consumerId uint64) ([]*entity.ConsumerLimit, error)
 	FindByConsumerIdAndTenor(ctx context.Context, consumerId uint64, tenor uint32) (*entity.ConsumerLimit, error)
-	Create(ctx context.Context, consumerId uint64, tenor uint32, limitAmount, limitAvailable uint64) (*entity.ConsumerLimit, error)
+	Create(ctx context.Context, consumerId uint64, tenor uint32, limitAmount uint64) (*entity.ConsumerLimit, error)
 	UpdateLimitAvailable(ctx context.Context, consumerLimit *entity.ConsumerLimit, transaction uint64) (*entity.ConsumerLimit, error)
 }
 
@@ -51,12 +51,12 @@ func (svc *ConsumerLimitService) FindByConsumerIdAndTenor(ctx context.Context, c
 	return res, nil
 }
 
-func (svc *ConsumerLimitService) Create(ctx context.Context, consumerId uint64, tenor uint32, limitAmount, limitAvailable uint64) (*entity.ConsumerLimit, error) {
+func (svc *ConsumerLimitService) Create(ctx context.Context, consumerId uint64, tenor uint32, limitAmount uint64) (*entity.ConsumerLimit, error) {
 	consumerLimit := &entity.ConsumerLimit{
 		ConsumerId:     consumerId,
 		Tenor:          tenor,
 		LimitAmount:    limitAmount,
-		LimitAvailable: limitAvailable,
+		LimitAvailable: limitAmount,
 		CreatedAt:      time.Now(),
 		UpdatedAt:      time.Now(),
 	}
