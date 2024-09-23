@@ -8,6 +8,9 @@ import (
 	"xyz-consumer-service/common/mysql"
 	"xyz-consumer-service/server"
 
+	consumerModule "xyz-consumer-service/modules/consumer"
+	consumerLimitModule "xyz-consumer-service/modules/consumer_limit"
+
 	"google.golang.org/grpc"
 	"gorm.io/gorm"
 )
@@ -42,16 +45,14 @@ func checkError(err error) {
 }
 
 func registerGrpcHandlers(server *grpc.Server, cfg config.Config, db *gorm.DB, grpcConn *grpc.ClientConn) {
-	// postModule.InitGrpc(server, cfg, db, grpcConn)
-	// commentModule.InitGrpc(server, cfg, db, grpcConn)
+	consumerModule.InitGrpc(server, cfg, db, grpcConn)
+	consumerLimitModule.InitGrpc(server, cfg, db, grpcConn)
 }
 
 func splash(cfg *config.Config) {
 	colorReset := "\033[0m"
-	// colorBlue := "\033[34m"
 	colorCyan := "\033[36m"
 
-	// fmt.Println(colorBlue, fmt.Sprintf(`⇨ REST server started on port :%s`, cfg.Port.REST))
-	fmt.Println(colorCyan, fmt.Sprintf(`⇨ GRPC xyz-consumer service server started on port :%s`, cfg.Port.GRPC))
+	fmt.Println(colorCyan, fmt.Sprintf(`-> GRPC %s server started on port :%s`, cfg.ServiceName, cfg.Port.GRPC))
 	fmt.Println(colorReset, "")
 }

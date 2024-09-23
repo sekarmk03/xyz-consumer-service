@@ -55,14 +55,12 @@ func (j *JWT) Verify(accessToken string) (*CustomClaims, error) {
 
 	if err != nil {
 		log.Println("ERROR: [JWT - Verify] Error while parsing token:", err)
-		// return nil, status.Errorf(codes.Unauthenticated, "invalid token: %v", err)
 		return nil, err
 	}
 
 	claims, ok := token.Claims.(*CustomClaims)
 	if !ok {
 		log.Println("ERROR: [JWT - Verify] Invalid token claims")
-		// return nil, status.Error(codes.Unauthenticated, "invalid token claims")
 		return nil, fmt.Errorf("invalid token claims")
 	}
 
@@ -77,7 +75,6 @@ func (j *JWT) Verify(accessToken string) (*CustomClaims, error) {
 func (c *CustomClaims) Valid() error {
 	// check if the token has expired.
 	if time.Now().Unix() > c.StandardClaims.ExpiresAt {
-		// return status.Error(codes.Unauthenticated, "token has expired")
 		return fmt.Errorf("token has expired")
 	}
 

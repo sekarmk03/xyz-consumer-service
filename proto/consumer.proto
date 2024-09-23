@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package xyz_grpc;
+option go_package = "./;pb";
+
+import "google/protobuf/empty.proto";
+
+message Consumer {
+    uint64 id = 1;
+    string nik = 2;
+    string fullname = 3;
+    string legal_name = 4;
+    string birth_place = 5;
+    string birth_date = 6;
+    uint64 salary = 7;
+    string ktp = 8;
+    string selfie_photo = 9;
+    string created_at = 10;
+    string updated_at = 11;
+}
+
+message ConsumerListResponse {
+    uint32 code = 1;
+    string message = 2;
+    repeated Consumer data = 3;
+}
+
+message ConsumerIdRequest {
+    uint64 id = 1;
+}
+
+message ConsumerResponse {
+    uint32 code = 1;
+    string message = 2;
+    Consumer data = 3;
+}
+
+message ConsumerDataRequest {
+    uint64 id = 1;
+    string nik = 2;
+    string fullname = 3;
+    string legal_name = 4;
+    string birth_place = 5;
+    string birth_date = 6;
+    uint64 salary = 7;
+    bytes ktp_buffer = 8;
+    string ktp_filename = 9;
+    bytes selfie_photo_buffer = 10;
+    string selfie_photo_filename = 11;
+}
+
+service ConsumerService {
+    rpc GetAllConsumers(google.protobuf.Empty) returns (ConsumerListResponse);
+    rpc GetConsumerById(ConsumerIdRequest) returns (ConsumerResponse);
+    rpc CreateConsumer(ConsumerDataRequest) returns (ConsumerResponse);
+    rpc UpdateConsumer(ConsumerDataRequest) returns (ConsumerResponse);
+    rpc DeleteConsumer(ConsumerIdRequest) returns (ConsumerResponse);
+}

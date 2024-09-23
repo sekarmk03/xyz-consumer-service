@@ -2,18 +2,19 @@ package config
 
 import (
 	"time"
+
 	"github.com/joeshaw/envdecode"
 	"github.com/joho/godotenv"
 	"github.com/pkg/errors"
 )
 
 type Config struct {
-	ServiceName string `env:"SERVICE_NAME,default=xyz-grpc"`
-	Port Port
-	MySQL MySQL
-	StoragePath string `env:"STORAGE_PATH,default=./uploads/"`
+	ServiceName       string `env:"SERVICE_NAME,default=xyz-grpc"`
+	Port              Port
+	MySQL             MySQL
+	StoragePath       string `env:"STORAGE_PATH,default=./uploads/"`
 	PublicStoragePath string `env:"PUBLIC_STORAGE_PATH,default=./public/"`
-	JWT JWTConfig
+	JWT               JWTConfig
 }
 
 type Port struct {
